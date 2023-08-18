@@ -1,53 +1,42 @@
 enum class Nivel { BASICO, INTERMEDIARIO, DIFICIL }
 
-data class Usuario(val name: String)
+data class Usuario(var name: String) // Representa um aluno da DIO
 
-data class ConteudoEducacional(var nome: String, val duracao: Int = 60)
+data class ConteudoEducacional(var nome: String, val duracao: Int = 60, val nivel: Nivel) // Adiciona o atributo nivel para o conteúdo
 
-data class Formacao(val nome: String, var conteudos: List<ConteudoEducacional>) {
+data class Formacao(val nome: String, var conteudos: List<ConteudoEducacional>, val nivel: Nivel) {
 
     val inscritos = mutableListOf<Usuario>(Usuario("Henrique"))
     
-    fun matricular(novoFulano: Usuario) {
-        inscritos.add(novoFulano)
-        println(inscritos)
-        println(novoFulano)
+    fun matricular(usuario: Usuario) { // adiona o novo usuario na Lista de inscritos
+        inscritos.add(usuario)
     }
-}
 
-fun cursosDisponiveis(obj: Int) : String {
-    val result = when (obj) {
-        1 -> "BootCamp kotlin"
-        2 -> "BootCamp Java"
-        3 -> "BootCamp Front-End"
-        else -> "Escolha um Curso"
+    fun listarConteudos() { // Adiciona um método para listar os conteúdos da formação
+        println("A formação $nome possui os seguintes conteúdos:")
+        for (conteudo in conteudos) {
+            println("- ${conteudo.nome} (Duração de ${conteudo.duracao} minutos) nível ${conteudo.nivel}") // Imprime o nível do conteúdo
+        }
     }
-    return result
 }
 
 fun main() {
     
-    var curso = 3
+    // Cria alguns conteúdos educacionais com os respectivos níveis
+    val conteudo1 = ConteudoEducacional("Apresentacao", 80, Nivel.BASICO)
+    val conteudo2 = ConteudoEducacional("Principios de Desenvolvimento", 90, Nivel.INTERMEDIARIO)
+    val conteudo3 = ConteudoEducacional("Conhecendo a Linguagem", 100, Nivel.DIFICIL)
     
-    println(cursosDisponiveis(curso))       
-    
-    val conteudo1 = ConteudoEducacional("Apresentacao", 80)
-    val conteudo2 = ConteudoEducacional("Principiso de Desenvolvimento", 90)
-    val conteudo3 = ConteudoEducacional("Conhecendo a Linguagem", 100)
-    
+    // Cria uma lista de conteúdos
     var conteudos = mutableListOf(conteudo1, conteudo2, conteudo3)
-    
-    //para eu ter um novo Usuario preciso já ter a formação com seu respectivo conteúdo
-    
- 	 Formacao(cursosDisponiveis(1), conteudos).matricular(Usuario("George"))
-    
-    
-    val nivel = Nivel.BASICO
-    
-    val nivelDaFormacao = when (nivel) {
-        Nivel.BASICO -> "Nivel Básico"
-        Nivel.INTERMEDIARIO -> "Nivel Intermediario"
-        Nivel.DIFICIL -> "Nivel Avançado"
-    }
-    println(nivelDaFormacao)
+
+    // Cria uma formação com os conteúdos e o nível
+    val formacao = Formacao("BootCamp kotlin", conteudos, Nivel.INTERMEDIARIO)
+
+    // Matricula um usuário na formação
+    formacao.matricular(Usuario("George"))
+
+    // Lista os conteúdos da formação
+    formacao.listarConteudos() 
+       
 }
